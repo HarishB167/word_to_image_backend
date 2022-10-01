@@ -5,4 +5,4 @@ from . import models
 class ImageWordSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.ImageWord
-        fields = ["label", "url"]
+        fields = ["id", "label", "url"]

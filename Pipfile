@@ -7,7 +7,8 @@ name = "pypi"
 django = "==3.1"
 django-debug-toolbar = "*"
 mysqlclient = "*"
-djangorestframework = "==3.11"
+djangorestframework = "==3.14.0"
+django-filter = "*"
 
 [dev-packages]
 
