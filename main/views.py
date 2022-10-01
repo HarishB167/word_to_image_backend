@@ -29,9 +29,9 @@ def get_images_for_words(request):
             words = [x.strip() for x in data.split(',')]
             queryset = ImageWord.objects 
             
-            q = Q(label__icontains=words[0])
+            q = Q(label__iexact=words[0])
             for word in words[1:]:
-                q = q | Q(label__icontains=word)
+                q = q | Q(label__iexact=word)
             queryset = queryset.filter(q).all()
             
             serializer = ImageWordSerializer(queryset, many=True)

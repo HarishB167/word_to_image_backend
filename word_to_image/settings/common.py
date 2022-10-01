@@ -11,19 +11,17 @@ https://docs.djangoproject.com/en/3.0/ref/settings/
 """
 
 import os
+from pathlib import Path
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
-BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+BASE_DIR = Path(__file__).resolve().parent.parent.parent
 
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.0/howto/deployment/checklist/
 
-# SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = '9s-@n3o_j8hb%0y1o5ewus2$)5(bwu_6pm3@_n2!98q8=(*4v0'
 
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+
 
 ALLOWED_HOSTS = []
 
@@ -40,12 +38,15 @@ INSTALLED_APPS = [
     'debug_toolbar',
     'rest_framework',
     'django_filters',
+    'corsheaders',
     'main',
 ]
 
 MIDDLEWARE = [
     'debug_toolbar.middleware.DebugToolbarMiddleware',
     'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -75,18 +76,6 @@ TEMPLATES = [
 WSGI_APPLICATION = 'word_to_image.wsgi.application'
 
 
-# Database
-# https://docs.djangoproject.com/en/3.0/ref/settings/#databases
-
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'wordToImage_db',
-        'HOST': 'localhost',
-        'USER': 'wordToImage_app',
-        'PASSWORD': '1234'
-    }
-}
 
 # Password validation
 # https://docs.djangoproject.com/en/3.0/ref/settings/#auth-password-validators
@@ -126,8 +115,46 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
+STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+
 INTERNAL_IPS = [
     # ...
     "127.0.0.1",
     # ...
 ]
+
+CORS_ALLOWED_ORIGINS = [
+  'http://localhost:8001',
+  'http://127.0.0.1:8001',
+  'http://127.0.0.1:3000',
+  'http://localhost:3000',
+]
+
+
+LOGGING = {
+  'version': 1,
+  'disable_existing_loggers': False,
+  'handlers' : {  # What will happen to log messages
+    'console': {
+      'class': 'logging.StreamHandler',
+      
+    },
+    'file' : {
+      'class': 'logging.FileHandler',
+      'filename': 'general.log',
+      'formatter' : 'verbose'
+    }
+  },
+  'loggers': { # define logger for individual app or submodule
+    '': { # captures from all apps
+      'handlers': ['console', 'file'], # reference handlers
+      'level': os.environ.get('DJANGO_LOG_LEVEL', 'INFO')
+    }
+  },
+  'formatters': {
+    'verbose': {
+      'format': '{asctime} ({levelname}) - {name} - {message}',
+      'style': '{'
+    }
+  }
+}

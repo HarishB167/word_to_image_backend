@@ -9,6 +9,10 @@ django-debug-toolbar = "*"
 mysqlclient = "*"
 djangorestframework = "==3.14.0"
 django-filter = "*"
+django-cors-headers = "*"
+whitenoise = "*"
+gunicorn = "*"
+dj-database-url = "*"
 
 [dev-packages]
 
